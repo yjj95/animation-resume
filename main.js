@@ -1,3 +1,4 @@
+!function(){
 var str=`
 /**
  * hello，我是闫佳，是一名前端开发工程师
@@ -23,6 +24,7 @@ var str=`
  */
    pre{
     overflow:auto;
+    transition: transform 1s;
    }
    body{
     padding:10px;
@@ -50,69 +52,82 @@ var str=`
   
 `
 var md=`
-#个人信息
-我叫、、、
-    1.、、、
-    2.、、、
-    3.、、、
-    #项目经验
+# 个人信息
+我叫..
+1.、、、
+2.、、、
+3.、、、
+# 项目经验
+、、、
+1.、、、
+2.、、、
+3.、、、
+# 项目介绍
     、、、
     1.、、、
     2.、、、
     3.、、、
-    #项目介绍
+# 自我评价
     、、、
     1.、、、
     2.、、、
     3.、、、
-    #自我评价
+# 个人信息
     、、、
     1.、、、
     2.、、、
     3.、、、
-    #个人信息
+# 项目经验
     、、、
     1.、、、
     2.、、、
     3.、、、
-    #项目经验
+# 项目介绍
     、、、
     1.、、、
     2.、、、
     3.、、、
-    #项目介绍
+# 自我评价
     、、、
     1.、、、
     2.、、、
     3.、、、
-    # 自我评价
+# 联系方式
     、、、
     1.、、、
     2.、、、
-    3.、、、
-    # 联系方式
-    、、、
-    1.、、、
-    2.、、、
-    3.、、、
-    
+    3.、、、   
 `
-function writecode(resume){    
+let css2=`
+  /* 接下来用一个优秀的库 marked.js
+   * 把 Markdown 变成 HTML
+   *、、、
+   *、、
+   *、
+   */
+`
+let css3=`
+   /*
+    * 来高亮一下
+    */
+`
+let domcode=document.querySelector('#code') 
+function writecode(str,fn){ 
   let n=0
   let timer=setInterval(()=>{
     n=n+1
-    code.innerText=code.innerText+str.substring(n-1,n)
+    domcode.innerText=domcode.innerText+str.substring(n-1,n)
     styleTag.innerText=styleTag.innerText+str.substring(n-1,n)
-    code.scrollTop=code.scrollHeight
+    domcode.scrollTop=domcode.scrollHeight
     if(n>=str.length){
       clearInterval(timer)
-      resume.call(undefined)
+      fn&&fn.call(undefined)
     }
   },10)
 }
-function writeresume(){
+let resume=document.createElement('pre')
+function writeresume(md,fn){
   let n=0
-  var resume=document.createElement('pre')
   resume.classList.add('resume')
   document.body.append(resume)
   var timer=setInterval(()=>{
@@ -121,30 +136,18 @@ function writeresume(){
     resume.scrollTop=resume.scrollHeight
     if(n>=md.length){
       clearInterval(timer)
-      let css2=`
-  /* 接下来用一个优秀的库 marked.js
-   * 把 Markdown 变成 HTML
-   *、、、
-   *、、
-   *、
-   *来高亮一下
-   */`
-      let n=0
-      timer=setInterval(()=>{
-        n=n+1
-        code.innerText=code.innerText+css2.substring(n-1,n)
-        code.scrollTop=code.scrollHeight
-        resume.innerHTML=marked(md)
-        console.log(marked(md))
-        if(n>css2.length){
-          clearInterval(timer)        
-          code.innerHTML=Prism.highlight(code.innerText, Prism.languages.css);
-          console.log(code.innerText.substring(0, n))
-          console.log(Prism)
-        }
-      },10)
+      fn&&fn.call(undefined)
     }
   },10)
 }
-
-writecode(writeresume)
+writecode(str,()=>{
+  writeresume(md,()=>{
+    writecode(css2,()=>{
+      resume.innerHTML=marked(md)
+      writecode(css3,()=>{
+        domcode.innerHTML=Prism.highlight(domcode.innerText, Prism.languages.css);
+      })
+    })
+  })
+})
+}.call()
